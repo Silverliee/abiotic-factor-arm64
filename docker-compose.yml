@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  abiotic-server-arm64:
+    build: .
+    restart: unless-stopped
+    volumes:
+      # Volumes identiques au projet original
+      - "./gamefiles:/server"
+      - "./data:/server/AbioticFactor/Saved"
+    environment:
+      # Variables exactement comme le projet original
+      - MaxServerPlayers=6
+      - Port=7777
+      - QueryPort=27015
+      - ServerPassword=password
+      - SteamServerName=ARM64 Linux Server
+      - UsePerfThreads=true
+      - NoAsyncLoadingThread=true
+      - WorldSaveName=Cascade
+      # Variables Box64 supplémentaires (optionnel, déjà dans le Dockerfile)
+      - BOX64_WINE=1
+      - BOX64_DYNAREC_STRONGMEM=1
+      - BOX64_DYNAREC_BIGBLOCK=2
+      # Activer la mise à jour automatique si désiré
+      # - AutoUpdate=true
+      # Arguments additionnels
+      # - AdditionalArgs=-SandboxIniPath=Config/WindowsServer/Server1Sandbox.ini
+    ports:
+      # Ports identiques au projet original
+      - "0.0.0.0:7777:7777/udp"
+      - "0.0.0.0:27015:27015/udp"
+    # Ressources augmentées pour l'émulation
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G
